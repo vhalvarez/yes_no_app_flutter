@@ -7,7 +7,6 @@ class ChatProvider extends ChangeNotifier {
   final GetYesNoAnswer getYesNoAnswer = GetYesNoAnswer();
   List<Message> messageList = [
     Message(text: 'Hola amor', fromWho: FromWho.me),
-    Message(text: 'Ya regresaste del trabajo?', fromWho: FromWho.me),
   ];
 
   Future<void> sendMessage(String text) async {
@@ -17,18 +16,22 @@ class ChatProvider extends ChangeNotifier {
     messageList.add(newMessage);
 
     if (text.endsWith('?')) {
-      await herReply();
+      herReply();
     }
 
     notifyListeners();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      moveScrollToBottom();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   moveScrollToBottom();
+    // });
+    moveScrollToBottom();
   }
 
   Future<void> herReply() async {
     final herMessage = await getYesNoAnswer.getAnswer();
+    messageList.add(herMessage);
+    notifyListeners();
+    moveScrollToBottom();
   }
 
   Future<void> moveScrollToBottom() async {
